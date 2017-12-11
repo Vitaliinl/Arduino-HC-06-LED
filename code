@@ -1,0 +1,109 @@
+#include <SoftwareSerial.h>
+
+#define BlueLed 3
+#define OrangeLed 6
+#define GreenLed 7
+#define MAX 255
+#define MIN 0
+#define RX 10
+#define TX 8
+
+char CBT;
+int bright = 0;
+
+SoftwareSerial BT (RX, TX); 
+
+unsigned long time;
+
+void setup()  
+  {
+  pinMode(BlueLed, OUTPUT);
+  pinMode(OrangeLed, OUTPUT);
+  pinMode(GreenLed, OUTPUT);
+  
+  BT.begin(9600);
+  Serial.begin(9600);
+  delay(1000);
+
+  BT.println("I'm waiting for your command.");
+  BT.print(' ');
+  
+  }
+  
+  
+  
+void greenblink () {
+    digitalWrite(GreenLed, HIGH);
+    delay(50);
+    digitalWrite(GreenLed, LOW);
+    delay(50);  
+}
+
+
+void loop() {
+  
+  if (BT.available()) {
+    
+  CBT = (BT.read());
+
+  
+  switch (CBT) 
+    {
+      case '+' :
+      if (bright < 255)
+      {bright+= 10;}
+      greenblink();
+      BT.println(bright);
+      break;
+
+      case '-' :
+      if (bright > 0)
+      {bright-= 10;}
+      greenblink();
+      BT.println(bright);
+      break;
+
+      case 'H' :
+      bright = MAX;
+      greenblink();
+      break;
+
+      case 'L' :
+      bright = MIN;
+      greenblink();
+      break;
+
+      case 'T' :
+      BT.println("Time of work = ");
+      BT.println(time/1000);
+      break;
+
+      default : 
+      //Error
+        digitalWrite(OrangeLed, HIGH);
+        delay(50);
+        digitalWrite(OrangeLed, LOW);
+        delay(50);
+        digitalWrite(OrangeLed, HIGH);
+        delay(50);
+        digitalWrite(OrangeLed, LOW);
+        delay(50);
+  }//switch
+  
+  analogWrite(BlueLed, bright);
+  }
+
+  time = millis();
+  
+}//main
+
+  
+  
+
+
+
+
+
+
+
+  
