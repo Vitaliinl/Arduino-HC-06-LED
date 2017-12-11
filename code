@@ -31,7 +31,7 @@ void setup()
   }
   
   
-  
+  //func blink
 void greenblink () {
     digitalWrite(GreenLed, HIGH);
     delay(50);
@@ -41,12 +41,12 @@ void greenblink () {
 
 
 void loop() {
-  
+  //read hc-06
   if (BT.available()) {
     
   CBT = (BT.read());
 
-  
+  //check command
   switch (CBT) 
     {
       case '+' :
@@ -79,6 +79,7 @@ void loop() {
       break;
 
       default : 
+      BT.println("unknown command");
       //Error
         digitalWrite(OrangeLed, HIGH);
         delay(50);
@@ -92,7 +93,7 @@ void loop() {
   
   analogWrite(BlueLed, bright);
   }
-
+//time func
   time = millis();
   
 }//main
